@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>絕美板橋牙醫 — 櫃台操作手冊</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:        #F7F5F0;
+    --surface:   #FFFFFF;
+    --border:    #E2DDD5;
+    --text:      #1A1714;
+    --muted:     #6B6560;
+    --accent:    #1A6B4A;
+    --accent-bg: #EAF5EF;
+
+    --teal-bg:   #E1F5EE; --teal-fg:   #085041; --teal-mid: #9FE1CB;
+    --blue-bg:   #E6F1FB; --blue-fg:   #0C447C;
+    --amber-bg:  #FDF0DC; --amber-fg:  #7A3A00;
+    --red-bg:    #FCEBEB; --red-fg:    #791F1F;
+    --green-bg:  #EAF3DE; --green-fg:  #27500A;
+    --pink-bg:   #FBEAF0; --pink-fg:   #4B1528;
+    --purple-bg: #EEEDFE; --purple-fg: #26215C;
+    --gray-bg:   #F1EFE8; --gray-fg:   #444441;
+
+    --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 0 0 1px var(--border);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-logo {
+    padding: 18px 16px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo .clinic { font-size: 12px; color: var(--muted); }
+  .sidebar-logo .brand { font-size: 15px; font-weight: 700; color: var(--text); margin-top: 2px; }
+  .sidebar-logo .version { font-size: 11px; color: var(--muted); margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
+
+  .search-wrap { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .search-wrap input {
+    width: 100%;
+    padding: 6px 10px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--text);
+    outline: none;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+
+  .nav-section { padding: 8px 8px 4px; }
+  .nav-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); padding: 0 8px; margin-bottom: 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-item:hover { background: var(--bg); color: var(--text); }
+  .nav-item.active { background: var(--accent-bg); color: var(--accent); font-weight: 500; }
+  .nav-badge {
+    width: 18px; height: 18px; border-radius: 50%;
+    font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Main ── */
+  .main { flex: 1; min-width: 0; }
+
+  /* ── Top bar ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .topbar h1 { font-size: 16px; font-weight: 700; }
+  .topbar-right { display: flex; gap: 8px; align-items: center; }
+  .chip {
+    font-size: 11px; padding: 3px 10px;
+    border-radius: 20px; font-weight: 500;
+    background: var(--green-bg); color: var(--green-fg);
+    border: 1px solid #C3E3A0;
+  }
+  #saveBtn {
+    font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: var(--r-sm);
+    border: 1.5px solid var(--accent);
+    background: var(--accent); color: #fff;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  #saveBtn:hover { background: #155a3c; }
+  #saveBtn:active { transform: scale(0.97); }
+  #saveBtn.saving { background: var(--muted); border-color: var(--muted); cursor: default; }
+
+  /* ── Content ── */
+  .content { padding: 28px 32px 60px; max-width: 860px; }
+
+  /* ── Chapter ── */
+  .chapter {
+    margin-bottom: 48px;
+    scroll-margin-top: 20px;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ch-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .ch-icon {
+    width: 36px; height: 36px; border-radius: var(--r-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .ch-meta { flex: 1; }
+  .ch-title { font-size: 18px; font-weight: 700; color: var(--text); }
+  .ch-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .ch-tag {
+    font-size: 11px; padding: 3px 9px; border-radius: 4px;
+    font-weight: 600; flex-shrink: 0;
+  }
+
+  /* ── Steps ── */
+  .steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 16px; top: 24px; bottom: 24px;
+    width: 1px; background: var(--border);
+    z-index: 0;
+  }
+
+  .step {
+    display: flex; gap: 16px;
+    padding: 14px 0;
+    position: relative; z-index: 1;
+  }
+  .step:last-child { padding-bottom: 0; }
+
+  .step-num {
+    width: 33px; height: 33px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    flex-shrink: 0; border: 2px solid var(--surface);
+    box-shadow: 0 0 0 2px var(--border);
+    background: var(--surface);
+  }
+  .step-body { flex: 1; padding-top: 4px; }
+  .step-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* ── Callouts ── */
+  .callout {
+    border-radius: var(--r-md);
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.65;
+    border-left: 3px solid;
+  }
+  .c-warn   { background: var(--amber-bg); border-color: #C07800; color: var(--amber-fg); }
+  .c-info   { background: var(--blue-bg);  border-color: #185FA5; color: var(--blue-fg); }
+  .c-ok     { background: var(--green-bg); border-color: #3B6D11; color: var(--green-fg); }
+  .c-danger { background: var(--red-bg);   border-color: #A32D2D; color: var(--red-fg); }
+
+  .callout strong { font-weight: 700; }
+  .callout-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    margin-bottom: 4px; display: block;
+  }
+
+  /* ── System box ── */
+  .sys-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 10px 14px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+  .sys-box strong { color: var(--text); font-weight: 600; }
+
+  /* ── Speech bubble ── */
+  .bubble {
+    background: var(--surface);
+    border: 1px solid var(--teal-mid);
+    border-radius: var(--r-md);
+    padding: 10px 14px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.75;
+    position: relative;
+    font-style: italic;
+  }
+  .bubble::before {
+    content: '💬';
+    margin-right: 6px;
+    font-style: normal;
+  }
+
+  /* ── Alert box (system prompt) ── */
+  .alert-box {
+    background: #FFFBEE;
+    border: 1px solid #F0CC70;
+    border-radius: var(--r-md);
+    padding: 10px 14px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #5A3800;
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .alert-box .prompt-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    color: #A06000; display: block; margin-bottom: 4px;
+    font-style: normal;
+  }
+
+  /* ── Example box ── */
+  .example {
+    background: var(--teal-bg);
+    border-radius: var(--r-md);
+    padding: 9px 14px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--teal-fg);
+    line-height: 1.65;
+  }
+  .example strong { font-weight: 700; font-style: normal; }
+
+  /* ── Screenshot placeholder ── */
+  .screenshot {
+    border: 2px dashed var(--border);
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    padding: 0;
+    margin-top: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .screenshot-bar {
+    background: var(--border);
+    padding: 7px 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .screenshot-bar .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .screenshot-bar .screen-title { font-size: 11px; color: var(--muted); margin-left: 4px; flex: 1; font-family: 'JetBrains Mono', monospace; }
+  .screenshot-inner {
+    padding: 20px 16px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 120px;
+    flex-direction: column; gap: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .screenshot-inner:hover { background: #EEF5EE; }
+  .screenshot-inner:hover .upload-hint { color: var(--accent); }
+  .screenshot-inner .ss-icon { font-size: 28px; opacity: 0.3; }
+  .screenshot-inner .ss-text { font-size: 12px; color: var(--muted); text-align: center; }
+  .screenshot-inner .upload-hint {
+    font-size: 12px; color: var(--accent); font-weight: 600;
+    margin-top: 4px; opacity: 0.8;
+  }
+  /* After image loaded */
+  .screenshot.has-image { border: 1px solid var(--border); }
+  .screenshot.has-image .screenshot-inner { padding: 0; min-height: 0; cursor: default; background: transparent; }
+  .screenshot.has-image .screenshot-inner:hover { background: transparent; }
+  .screenshot-img-wrap {
+    position: relative; width: 100%;
+  }
+  .screenshot-img-wrap img { width: 100%; display: block; }
+  .screenshot-img-wrap .img-remove {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(0,0,0,0.55); color: #fff;
+    border: none; border-radius: 50%;
+    width: 26px; height: 26px;
+    font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .screenshot-img-wrap:hover .img-remove { opacity: 1; }
+  /* Drag-over highlight */
+  .screenshot.drag-over { border-color: var(--accent); background: var(--accent-bg); }
+
+  /* Real screenshot container */
+  .screenshot-real {
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    margin-top: 12px;
+    box-shadow: var(--shadow);
+  }
+  .screenshot-real img { width: 100%; display: block; }
+
+  /* ── Annotation markers ── */
+  .annot-wrap { position: relative; display: inline-block; }
+  .annot {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 12px; font-weight: 700;
+    background: #E63C3C; color: #fff;
+    position: absolute;
+    box-shadow: 0 2px 6px rgba(230,60,60,0.4);
+    cursor: default;
+    z-index: 5;
+  }
+
+  /* ── Inline annotation legend ── */
+  .annot-legend {
+    display: flex; flex-direction: column; gap: 6px;
+    margin-top: 10px;
+  }
+  .annot-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 13px; color: var(--muted);
+  }
+  .annot-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    font-size: 11px; font-weight: 700;
+    background: #E63C3C; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── Money table ── */
+  .money-table {
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+  .money-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .money-row:last-child { border-bottom: none; background: var(--bg); font-weight: 700; }
+  .money-label { color: var(--muted); }
+  .money-val { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+  /* ── Flow row ── */
+  .flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .flow-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 5px 11px;
+    font-size: 12px; color: var(--text);
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .flow-arrow { color: var(--muted); font-size: 14px; }
+
+  /* ── Session tabs ── */
+  .session-tabs { display: flex; gap: 6px; margin-top: 8px; }
+  .stab {
+    padding: 4px 14px; border-radius: 4px;
+    font-size: 12px; font-weight: 600;
+    border: 1px solid;
+  }
+  .stab-am  { background: var(--amber-bg); color: var(--amber-fg); border-color: #F0CC70; }
+  .stab-pm  { background: var(--teal-bg);  color: var(--teal-fg);  border-color: var(--teal-mid); }
+  .stab-eve { background: var(--purple-bg);color: var(--purple-fg);border-color: #AFA9EC; }
+
+  /* ── Sheet demo ── */
+  .sheet {
+    border: 1px solid var(--border); border-radius: var(--r-md);
+    overflow: hidden; margin-top: 10px; font-size: 12px;
+  }
+  .sheet-head, .sheet-row { display: grid; }
+  .sheet-head { background: var(--bg); }
+  .sheet-head div, .sheet-row div {
+    padding: 7px 10px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .sheet-head div { font-weight: 700; font-size: 11px; color: var(--muted); }
+  .sheet-row div { color: var(--text); }
+  .sheet-head div:last-child, .sheet-row div:last-child { border-right: none; }
+  .sheet-row:last-child div { border-bottom: none; }
+
+  /* ── Checklist ── */
+  .checklist { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .cl-item { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: var(--muted); }
+  .cb {
+    width: 16px; height: 16px; border: 2px solid var(--border);
+    border-radius: 3px; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .cb.done { background: var(--accent); border-color: var(--accent); }
+  .cb.done::after { content: '✓'; color: #fff; font-size: 10px; font-weight: 800; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--border); margin: 10px 0 40px; }
+
+  /* ── Tag ── */
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px; margin: 0 2px;
+  }
+  .t-teal   { background: var(--teal-bg);   color: var(--teal-fg); }
+  .t-blue   { background: var(--blue-bg);   color: var(--blue-fg); }
+  .t-amber  { background: var(--amber-bg);  color: var(--amber-fg); }
+  .t-red    { background: var(--red-bg);    color: var(--red-fg); }
+  .t-green  { background: var(--green-bg);  color: var(--green-fg); }
+  .t-purple { background: var(--purple-bg); color: var(--purple-fg); }
+  .t-gray   { background: var(--gray-bg);   color: var(--gray-fg); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center; font-size: 12px;
+    color: var(--muted); padding: 16px 0 32px;
+    border-top: 1px solid var(--border); margin-top: 20px;
+  }
+
+  /* ── Print / mobile ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 20px 16px 40px; }
+    .topbar { padding: 12px 16px; }
+  }
+  @media print {
+    .sidebar, .topbar { display: none; }
+    .content { padding: 0; max-width: 100%; }
+    .chapter { break-inside: avoid; animation: none; opacity: 1; }
+  }
+
+  /* highlight from search */
+  .hl { background: #FDE68A; border-radius: 2px; padding: 0 2px; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="clinic">絕美板橋牙醫診所</div>
+      <div class="brand">櫃台操作手冊</div>
+      <div class="version">北極星 V1.11.2.01 · v7</div>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="🔍 搜尋關鍵字…" oninput="doSearch(this.value)">
+    </div>
+
+    <div class="nav-section" id="navList">
+      <div class="nav-label">到診 &amp; 收款</div>
+      <a class="nav-item" href="#ch1" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--teal-bg);color:var(--teal-fg);">1</span>病患到診掛號流程
+      </a>
+      <a class="nav-item" href="#ch1b" onclick="setActive(this)">
+        <span class="nav-badge" style="background:#C0DD97;color:#173404;">1+</span>Google 日帳表登帳
+      </a>
+      <a class="nav-item" href="#ch2" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--blue-bg);color:var(--blue-fg);">2</span>自費收款（YouKnow）
+      </a>
+      <a class="nav-item" href="#ch3" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--amber-bg);color:var(--amber-fg);">3</span>建立自費表單
+      </a>
+      <a class="nav-item" href="#ch4" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--red-bg);color:var(--red-fg);">4</span>退掛處理
+      </a>
+      <a class="nav-item" href="#ch5" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--pink-bg);color:var(--pink-fg);">5</span>欠卡收押金
+      </a>
+      <a class="nav-item" href="#ch6" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--green-bg);color:var(--green-fg);">6</span>補卡退押金
+      </a>
+
+      <div class="nav-label" style="margin-top:10px;">結帳</div>
+      <a class="nav-item" href="#ch6b" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--teal-mid);color:#04342C;">結</span>診次結帳
+      </a>
+      <a class="nav-item" href="#ch6c" onclick="setActive(this)">
+        <span class="nav-badge" style="background:#1A6B4A;color:#fff;">日</span>每日最後結帳
+      </a>
+
+      <div class="nav-label" style="margin-top:10px;">預約管理</div>
+      <a class="nav-item" href="#ch7" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--purple-bg);color:var(--purple-fg);">7</span>來電預約 — 新患者
+      </a>
+      <a class="nav-item" href="#ch8" onclick="setActive(this)">
+        <span class="nav-badge" style="background:#AFA9EC;color:var(--purple-fg);">8</span>來電預約 — 舊患者
+      </a>
+      <a class="nav-item" href="#ch9" onclick="setActive(this)">
+        <span class="nav-badge" style="background:#FFD59E;color:#7A3A00;">9</span>改約 — 舊患者
+      </a>
+      <a class="nav-item" href="#ch10" onclick="setActive(this)">
+        <span class="nav-badge" style="background:#F7C1C1;color:var(--red-fg);">10</span>取消預約 — 舊患者
+      </a>
+      <a class="nav-item" href="#ch11" onclick="setActive(this)">
+        <span class="nav-badge" style="background:#E8D5F7;color:#4A1A7A;">11</span>取消預約 — 新患者
+      </a>
+
+      <div class="nav-label" style="margin-top:10px;">參考</div>
+      <a class="nav-item" href="#ch12" onclick="setActive(this)">
+        <span class="nav-badge" style="background:var(--gray-bg);color:var(--gray-fg);">!</span>常見注意事項
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div class="main">
+    <div class="topbar">
+      <h1>北極星牙醫掛號系統 — 櫃台操作手冊</h1>
+      <div class="topbar-right">
+        <span class="chip">適用：新進櫃台人員</span>
+        <span style="font-size:12px;color:var(--muted);">v7 · 2025</span>
+        <button id="saveBtn" onclick="saveWithImages()" title="將已上傳的截圖永久存入 HTML 並下載">
+          💾 儲存含圖片版本
+        </button>
+      </div>
+    </div>
+
+    <div class="content" id="mainContent">
+
+      <!-- ────────── Ch1 ────────── -->
+      <div class="chapter" id="ch1">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--teal-bg);">📋</div>
+          <div class="ch-meta">
+            <div class="ch-title">1. 病患到診掛號流程</div>
+            <div class="ch-sub">病患抵達 → 核對約診 → 掛號 → 登帳</div>
+          </div>
+          <span class="ch-tag" style="background:var(--teal-bg);color:var(--teal-fg);">日常核心</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--teal-bg);color:var(--teal-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">確認病患姓名，核對約診欄位</div>
+              <div class="step-desc">查看系統左上方「約診」欄位，確認：<strong>牙位</strong>、<strong>療程內容</strong>、<strong>是否備註需收費</strong>。</div>
+              <div class="sys-box">
+                畫面範例：<strong>「37 建Wall+RCT*V OK &lt;請準備費用&gt;」</strong><br>
+                → 代表需自費收款，需提前告知病患備妥款項。
+              </div>
+
+              <!-- Screenshot placeholder -->
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div>
+                  <div class="dot" style="background:#FEBC2E;"></div>
+                  <div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 — 候診清單畫面</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">🖥️</div>
+                                    <div class="ss-text">【截圖放置區】候診清單畫面<br><span style="font-size:11px;">患者姓名請馬賽克處理</span></div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+
+              <div class="annot-legend">
+                <div class="annot-item">
+                  <div class="annot-num">①</div>
+                  <div>左上方「約診」欄位 — 確認療程內容</div>
+                </div>
+                <div class="annot-item">
+                  <div class="annot-num">②</div>
+                  <div>備註區 — 確認是否標示「請準備費用」</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--teal-bg);color:var(--teal-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">收取掛號費 $200，點「到診 C」→「掛號不取卡」</div>
+              <div class="sys-box">
+                操作路徑：<strong>候診清單</strong> → 點「到診 C」按鈕 → 選「<strong>掛號不取卡</strong>」
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div>
+                  <div class="dot" style="background:#FEBC2E;"></div>
+                  <div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 — 到診按鈕</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">🖥️</div>
+                                    <div class="ss-text">【截圖放置區】「到診 C」按鈕與掛號類型選單<br><span style="font-size:11px;">患者姓名請馬賽克處理</span></div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+
+              <div class="annot-legend">
+                <div class="annot-item">
+                  <div class="annot-num">①</div>
+                  <div>「到診 C」按鈕位置（候診清單右側）</div>
+                </div>
+                <div class="annot-item">
+                  <div class="annot-num">②</div>
+                  <div>選「掛號不取卡」— 一般情況預設此選項</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--teal-bg);color:var(--teal-fg);">③</div>
+            <div class="step-body">
+              <div class="step-title">立即登入 Google 日帳表完成登帳</div>
+              <div class="callout c-warn">
+                <span class="callout-label">⚠ 重要習慣</span>
+                日帳表未填，結帳時無法核對金額。<strong>養成掛號後立即登帳的習慣</strong>，不要積到最後一起填。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch1b ────────── -->
+      <div class="chapter" id="ch1b">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:#C0DD97;">📊</div>
+          <div class="ch-meta">
+            <div class="ch-title">1+. Google 日帳表登帳操作</div>
+            <div class="ch-sub">每位病患掛號完成後立即填寫</div>
+          </div>
+          <span class="ch-tag" style="background:#C0DD97;color:#173404;">每次必做</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:#C0DD97;color:#173404;">①</div>
+            <div class="step-body">
+              <div class="step-title">開啟日帳表，選對診次工作表</div>
+              <div class="step-desc">依當前診次開啟對應的工作表頁籤：</div>
+              <div class="session-tabs">
+                <span class="stab stab-am">早診</span>
+                <span class="stab stab-pm">午診</span>
+                <span class="stab stab-eve">晚診</span>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div>
+                  <div class="dot" style="background:#FEBC2E;"></div>
+                  <div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">Google 日帳表 — 工作表頁籤</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">📊</div>
+                                    <div class="ss-text">【截圖放置區】日帳表底部工作表頁籤（早診 / 午診 / 晚診）</div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#C0DD97;color:#173404;">②</div>
+            <div class="step-body">
+              <div class="step-title">依序填寫每位病患資料</div>
+
+              <div class="sheet" style="grid-template-columns:auto;">
+                <div class="sheet-head" style="grid-template-columns:36px 70px 80px 65px 80px 90px 70px;">
+                  <div>NO.</div><div>醫師代號</div><div>病患姓名</div><div>掛號費</div><div>部分負擔</div><div>自費項目</div><div>金額</div>
+                </div>
+                <div class="sheet-row" style="display:grid;grid-template-columns:36px 70px 80px 65px 80px 90px 70px;">
+                  <div>1</div>
+                  <div style="color:var(--accent);">003 ▾</div>
+                  <div>█████</div>
+                  <div><span class="cb done"></span></div>
+                  <div><span class="cb done"></span></div>
+                  <div style="color:var(--accent);">D ▾</div>
+                  <div style="font-family:'JetBrains Mono',monospace;">15,000</div>
+                </div>
+              </div>
+
+              <div class="callout c-danger" style="margin-top:12px;">
+                <span class="callout-label">🚫 必須一致</span>
+                自費金額必須與 YouKnow 記錄一致。發現不一致時，<strong>立即告知主管</strong>，不可自行修改。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch2 ────────── -->
+      <div class="chapter" id="ch2">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--blue-bg);">💳</div>
+          <div class="ch-meta">
+            <div class="ch-title">2. 自費收款作業（YouKnow）</div>
+            <div class="ch-sub">已有自費案件時，進行本次收款登記</div>
+          </div>
+          <span class="ch-tag" style="background:var(--blue-bg);color:var(--blue-fg);">自費</span>
+        </div>
+
+        <div class="callout c-danger">
+          <span class="callout-label">🚫 操作前必確認</span>
+          點「YOU KNOW」前，<strong>必須確認藍色底色停在正確的病患列</strong>。選錯病患將導致收款記錄錯誤。
+        </div>
+
+        <div class="steps" style="margin-top:14px;">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--blue-bg);color:var(--blue-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">點「YOU KNOW」→ 核對右側病患姓名</div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 → YOU KNOW 按鈕</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">🖥️</div>
+                                    <div class="ss-text">【截圖放置區】YOU KNOW 按鈕位置與右側病患姓名顯示區<br><span style="font-size:11px;">患者姓名請馬賽克處理</span></div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+              <div class="annot-legend">
+                <div class="annot-item"><div class="annot-num">①</div><div>「YOU KNOW」按鈕</div></div>
+                <div class="annot-item"><div class="annot-num">②</div><div>右側病患姓名 — 進入前核對是否正確</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--blue-bg);color:var(--blue-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">表單輸入 → 自費案件列表 → 點鉛筆圖示</div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">YouKnow — 自費案件列表</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">🖊️</div>
+                                    <div class="ss-text">【截圖放置區】自費案件列表畫面，標示鉛筆圖示位置<br><span style="font-size:11px;">患者姓名請馬賽克處理</span></div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+              <div class="annot-legend">
+                <div class="annot-item"><div class="annot-num">①</div><div>左側選單：「表單輸入」→「自費案件列表」</div></div>
+                <div class="annot-item"><div class="annot-num">②</div><div>✏️ 鉛筆圖示 — 點此進入收款填寫</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--blue-bg);color:var(--blue-fg);">③</div>
+            <div class="step-body">
+              <div class="step-title">填寫本次付款欄位後儲存</div>
+              <div class="sys-box">
+                需填寫欄位：<br>
+                <strong>診治醫師</strong> ／ <strong>收費類別</strong> ／ <strong>收款人</strong> ／ <strong>付款方式</strong>（現金 / 匯款）／ <strong>付款金額</strong>
+              </div>
+              <div class="callout c-ok" style="margin-top:10px;">
+                <span class="callout-label">✅ 儲存後</span>
+                立即回 Google 日帳表，同步填入<strong>相同金額</strong>。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch3 ────────── -->
+      <div class="chapter" id="ch3">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--amber-bg);">📝</div>
+          <div class="ch-meta">
+            <div class="ch-title">3. 建立自費表單（無案件時）</div>
+            <div class="ch-sub">YouKnow 尚無自費案件，需先新建</div>
+          </div>
+          <span class="ch-tag" style="background:var(--amber-bg);color:var(--amber-fg);">自費</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--amber-bg);color:var(--amber-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">右側點「+ 治療計劃建議」→ 填標題</div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">YouKnow — 新增治療計劃</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">📝</div>
+                                    <div class="ss-text">【截圖放置區】「+ 治療計劃建議」按鈕位置</div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--amber-bg);color:var(--amber-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">新增項目：類別 → 次分類 → 品項 → 牙位 → 售價與數量</div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">YouKnow — 新增自費項目</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">📋</div>
+                                    <div class="ss-text">【截圖放置區】項目填寫介面（類別、品項、牙位、售價）</div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+              <div class="annot-legend">
+                <div class="annot-item"><div class="annot-num">①</div><div>類別 → 次分類</div></div>
+                <div class="annot-item"><div class="annot-num">②</div><div>品項選擇</div></div>
+                <div class="annot-item"><div class="annot-num">③</div><div>牙位 / 售價 / 數量</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--amber-bg);color:var(--amber-fg);">③</div>
+            <div class="step-body">
+              <div class="step-title">確認合計後儲存，回自費案件列表進行收款</div>
+              <div class="callout c-info">儲存完成後，依第 2 章「自費收款作業」步驟進行收款。</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch4 ────────── -->
+      <div class="chapter" id="ch4">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--red-bg);">🔄</div>
+          <div class="ch-meta">
+            <div class="ch-title">4. 退掛處理</div>
+            <div class="ch-sub">病患尚未進入診間，需取消本次掛號</div>
+          </div>
+          <span class="ch-tag" style="background:var(--red-bg);color:var(--red-fg);">謹慎操作</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--red-bg);color:var(--red-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">候診清單右側：選「退」或「刪」</div>
+              <div class="sys-box">
+                <strong>「退」</strong>：退掛並保留系統紀錄，同時退回掛號費 $200<br>
+                <strong>「刪」</strong>：直接刪除掛號紀錄（謹慎操作，用於誤掛情況）
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--red-bg);color:var(--red-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">點「退」→ 確認視窗按「是」→ 退還 $200 給病患</div>
+
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 — 退掛確認視窗</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">🔄</div>
+                                    <div class="ss-text">【截圖放置區】退掛確認對話框（按「是」確認）<br><span style="font-size:11px;">患者姓名請馬賽克處理</span></div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+
+              <div class="callout c-danger" style="margin-top:10px;">
+                <span class="callout-label">🚫 禁止</span>
+                <strong>已在診間看診的病患，不可自行退掛。</strong>請立即告知主管處理。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch5 ────────── -->
+      <div class="chapter" id="ch5">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--pink-bg);">🪪</div>
+          <div class="ch-meta">
+            <div class="ch-title">5. 欠卡病患到診 — 收押金</div>
+            <div class="ch-sub">健保卡遺失 / 未攜帶，需收押金後才可掛號</div>
+          </div>
+          <span class="ch-tag" style="background:var(--pink-bg);color:var(--pink-fg);">押金流程</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--pink-bg);color:var(--pink-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">點「到診 C」→ 選「欠卡」</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--pink-bg);color:var(--pink-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">確認收費金額</div>
+              <div class="money-table">
+                <div class="money-row"><span class="money-label">掛號費</span><span class="money-val">$200</span></div>
+                <div class="money-row"><span class="money-label">押金（欠卡）</span><span class="money-val">$1,000</span></div>
+                <div class="money-row"><span class="money-label">合計應收</span><span class="money-val">$1,200</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--pink-bg);color:var(--pink-fg);">③</div>
+            <div class="step-body">
+              <div class="step-title">點「金額正確」→ 列印押單 → 蓋章 → 填補卡期限</div>
+              <div class="example">
+                補卡期限計算：<strong>今天日期 + 12 天</strong><br>
+                例：5 月 1 日到診 → 補卡期限填 <strong>5 月 13 日</strong>
+              </div>
+              <div class="callout c-danger" style="margin-top:8px;">
+                <span class="callout-label">⚠ 逾期規定</span>
+                逾期未補卡，押金 $1,000 <strong>沒收</strong>，告知病患此規定。
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--pink-bg);color:var(--pink-fg);">④</div>
+            <div class="step-body">
+              <div class="step-title">填寫紙本押金紀錄</div>
+              <div class="step-desc">於押金紀錄本填入：姓名、日期、金額、補卡期限，並請病患確認簽名。</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch6 ────────── -->
+      <div class="chapter" id="ch6">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--green-bg);">✅</div>
+          <div class="ch-meta">
+            <div class="ch-title">6. 補卡退押金</div>
+            <div class="ch-sub">病患補帶健保卡，退還押金 $1,000</div>
+          </div>
+          <span class="ch-tag" style="background:var(--green-bg);color:var(--green-fg);">押金退還</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--green-bg);color:var(--green-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">點「欠卡明細」→ 找到對應病患 → 點「補卡」</div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 — 欠卡明細清單</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">🪪</div>
+                                    <div class="ss-text">【截圖放置區】欠卡明細清單，標示「補卡」按鈕位置<br><span style="font-size:11px;">患者姓名請馬賽克處理</span></div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--green-bg);color:var(--green-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">列印退款收據 → 退還 $1,000 → 請病患在紙本簽名</div>
+              <div class="callout c-ok">
+                <span class="callout-label">✅ 完成</span>
+                紙本收據請病患簽名後歸檔，完成補卡退押金程序。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch6b 診次結帳 ────────── -->
+      <div class="chapter" id="ch6b">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--teal-mid);">💰</div>
+          <div class="ch-meta">
+            <div class="ch-title">診次結帳流程（早 / 午 / 晚診）</div>
+            <div class="ch-sub">每個診次結束後，核對現金與日帳表</div>
+          </div>
+          <span class="ch-tag" style="background:var(--teal-bg);color:var(--teal-fg);">每診必做</span>
+        </div>
+
+        <div class="callout c-info" style="margin-bottom:14px;">
+          每個診次結束後需結帳。抽屜備用零用金為 <strong>$3,000</strong>（固定不計入收入）。
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--teal-mid);color:#04342C;">①</div>
+            <div class="step-body">
+              <div class="step-title">選對診次工作表，確認所有病患資料已填完整</div>
+              <div class="session-tabs">
+                <span class="stab stab-am">早診</span>
+                <span class="stab stab-pm">午診</span>
+                <span class="stab stab-eve">晚診</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--teal-mid);color:#04342C;">②</div>
+            <div class="step-body">
+              <div class="step-title">逐列核對：醫師、姓名、掛號費勾選、自費項目與金額</div>
+              <div class="checklist">
+                <div class="cl-item"><span class="cb done" onclick="toggle(this)"></span>每位病患醫師代號已填</div>
+                <div class="cl-item"><span class="cb done" onclick="toggle(this)"></span>掛號費欄已打勾</div>
+                <div class="cl-item"><span class="cb" onclick="toggle(this)"></span>自費項目與金額已填（與 YouKnow 一致）</div>
+                <div class="cl-item"><span class="cb" onclick="toggle(this)"></span>欄位無空白漏填</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--teal-mid);color:#04342C;">③</div>
+            <div class="step-body">
+              <div class="step-title">清點現金，核對公式</div>
+              <div class="money-table">
+                <div class="money-row">
+                  <span class="money-label">抽屜現金總額</span>
+                  <span class="money-val">— 清點</span>
+                </div>
+                <div class="money-row">
+                  <span class="money-label">減：備用零用金</span>
+                  <span class="money-val">− $3,000</span>
+                </div>
+                <div class="money-row">
+                  <span class="money-label">= 本診次實收</span>
+                  <span class="money-val">應 = 日帳表合計</span>
+                </div>
+              </div>
+              <div class="callout c-danger" style="margin-top:10px;">
+                <span class="callout-label">🚫 發現差額</span>
+                有差額時，<strong>立即告知主管</strong>。不可自行補差額或修改帳表。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch6c 每日最後結帳 ────────── -->
+      <div class="chapter" id="ch6c">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:#1A6B4A; color:#fff;">📑</div>
+          <div class="ch-meta">
+            <div class="ch-title">每日最後結帳（門診統計表）</div>
+            <div class="ch-sub">當日最後一診結束後，進行全日結帳並列印統計表</div>
+          </div>
+          <span class="ch-tag" style="background:#EAF5EF;color:#1A6B4A;border:1px solid #9FE1CB;">每日必做</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:#1A6B4A;color:#fff;">①</div>
+            <div class="step-body">
+              <div class="step-title">完成最後一診的「診次結帳」後，開啟門診統計表</div>
+              <div class="sys-box">
+                操作路徑：<strong>北極星主選單</strong> → 「門診統計」→「當日門診統計表」
+              </div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 — 門診統計表</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">📑</div>
+                                    <div class="ss-text">【截圖放置區】門診統計表畫面（含各診次匯總）</div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#1A6B4A;color:#fff;">②</div>
+            <div class="step-body">
+              <div class="step-title">確認統計表數字：各診次掛號筆數、掛號費合計、自費合計</div>
+              <div class="step-desc">核對統計表的<strong>合計金額</strong>是否與各診次日帳表加總一致。</div>
+              <div class="callout c-warn">
+                <span class="callout-label">⚠ 核對重點</span>
+                統計表 = 早診合計 + 午診合計 + 晚診合計。若有差異，逐診追查來源。
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#1A6B4A;color:#fff;">③</div>
+            <div class="step-body">
+              <div class="step-title">列印統計表，主管確認後簽章</div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 — 列印門診統計表</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">🖨️</div>
+                                    <div class="ss-text">【截圖放置區】統計表列印按鈕位置</div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#1A6B4A;color:#fff;">④</div>
+            <div class="step-body">
+              <div class="step-title">將紙本統計表與當日日帳表列印本一同歸檔</div>
+              <div class="callout c-ok">
+                <span class="callout-label">✅ 完成</span>
+                完成歸檔後，抽屜歸還備用零用金 $3,000，關機離開。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch7 來電 NP ────────── -->
+      <div class="chapter" id="ch7">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--purple-bg);">📞</div>
+          <div class="ch-meta">
+            <div class="ch-title">7. 來電預約 — 新患者（NP）</div>
+            <div class="ch-sub">從未就診的新患者來電預約</div>
+          </div>
+          <span class="ch-tag" style="background:var(--purple-bg);color:var(--purple-fg);">NP</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:var(--purple-bg);color:var(--purple-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">接起電話，標準問候語</div>
+              <div class="bubble">你好，絕美板橋牙醫。</div>
+              <div class="step-desc" style="margin-top:8px;">聆聽需求後詢問：<strong>是否指定醫師？</strong><strong>是否有轉診單？</strong></div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--purple-bg);color:var(--purple-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">點日曆圖案（約）→ 查詢患者 → 新患者</div>
+              <div class="screenshot">
+                <div class="screenshot-bar">
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
+                  <span class="screen-title">北極星 — 約診網頁 新患者流程</span>
+                </div>
+                                <div class="screenshot-inner" onclick="triggerUpload(this)">
+                  <div class="ss-icon">📅</div>
+                                    <div class="ss-text">【截圖放置區】日曆圖示位置 → 查詢患者 → 新患者按鈕</div>
+                  <div class="upload-hint">📂 點此上傳截圖</div>
+                </div>
+              </div>
+              <div class="annot-legend">
+                <div class="annot-item"><div class="annot-num">①</div><div>右上角「日曆」圖示（約診網頁入口）</div></div>
+                <div class="annot-item"><div class="annot-num">②</div><div>「查詢患者」→ 點「新患者」</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--purple-bg);color:var(--purple-fg);">③</div>
+            <div class="step-body">
+              <div class="step-title">選空白時段，填寫預約資料</div>
+              <div class="example">
+                預約備註格式：<strong>游芊柔 / micro consult*V 芊芊</strong><br>
+                = 患者姓名 ／ 療程描述 ＊V 當班人員代號
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--purple-bg);color:var(--purple-fg);">④</div>
+            <div class="step-body">
+              <div class="step-title">口頭確認後儲存</div>
+              <div class="bubble">您的名字是＿＿，電話＿＿，預約＿月＿日＿點，請問正確嗎？</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch8 來電 OP ────────── -->
+      <div class="chapter" id="ch8">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:#AFA9EC;">📞</div>
+          <div class="ch-meta">
+            <div class="ch-title">8. 來電預約 — 舊患者（OP）</div>
+            <div class="ch-sub">曾就診的舊患者來電預約</div>
+          </div>
+          <span class="ch-tag" style="background:#AFA9EC;color:var(--purple-fg);">OP</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:#AFA9EC;color:var(--purple-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">點「病患查詢」，問民國出生年月日</div>
+              <div class="bubble">請問您的民國出生年月日是？</div>
+              <div class="callout c-warn" style="margin-top:8px;">
+                <span class="callout-label">⚠ 查詢原則</span>
+                一律用<strong>民國生日</strong>查詢，避免同名病患混淆。
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#AFA9EC;color:var(--purple-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">核對姓名 → 詢問需求 → 選空白時段 → 口頭確認 → 儲存</div>
+              <div class="bubble">
+                請問您是＿＿先生 / 小姐嗎？<br>
+                請問今天牙齒有什麼問題呢？
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch9 改約 ────────── -->
+      <div class="chapter" id="ch9">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:#FFD59E;">🔁</div>
+          <div class="ch-meta">
+            <div class="ch-title">9. 來電改約 — 舊患者（OP）</div>
+            <div class="ch-sub">舊患者要更改預約時間</div>
+          </div>
+          <span class="ch-tag" style="background:#FDF0DC;color:#7A3A00;">⏱ 5分鐘時限</span>
+        </div>
+
+        <div class="callout c-danger" style="margin-bottom:14px;">
+          <span class="callout-label">🚫 重要提醒</span>
+          點「改約」後系統有 <strong>5 分鐘時限</strong>。<strong>先與患者確認好新時間，再點改約按鈕</strong>，不可點完才開始討論。
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:#FFD59E;color:#7A3A00;">①</div>
+            <div class="step-body">
+              <div class="step-title">確認身分：民國生日 → 全名</div>
+              <div class="bubble">請問您的民國出生年月日是？請問您是＿＿先生 / 小姐嗎？</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#FFD59E;color:#7A3A00;">②</div>
+            <div class="step-body">
+              <div class="step-title">開約診網頁 → 左下角「預約記錄（預約表）」</div>
+              <div class="step-desc">確認患者所有預約，問清楚要改哪一次。</div>
+              <div class="sys-box">預約表列出：預約日期、時間、醫師、預約事項，協助患者確認要更動的那筆。</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#FFD59E;color:#7A3A00;">③</div>
+            <div class="step-body">
+              <div class="step-title">點選該筆約診 → 確認提示 → 點「確定」</div>
+              <div class="alert-box">
+                <span class="prompt-label">💻 系統提示</span>
+                「您正試著修改另一位患者的預約資料，是否確定進行修改此筆預約？」→ 按<strong>確定</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#FFD59E;color:#7A3A00;">④</div>
+            <div class="step-body">
+              <div class="step-title">在約診表單中，點「改約」按鈕</div>
+              <div class="alert-box">
+                <span class="prompt-label">💻 系統提示</span>
+                「改約資料已複製，請於 5 分鐘內重新選擇日期及時段！」→ 按<strong>確定</strong>
+              </div>
+              <div class="callout c-danger" style="margin-top:8px;">
+                <span class="callout-label">⏱ 計時開始</span>
+                系統 5 分鐘時限從此刻開始，<strong>立即</strong>在約診簿選擇新時段。
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#FFD59E;color:#7A3A00;">⑤</div>
+            <div class="step-body">
+              <div class="step-title">在約診簿點選新的空白時段 → 確認改約</div>
+              <div class="alert-box">
+                <span class="prompt-label">💻 系統提示</span>
+                「您現在正處於改約狀態中，若進行預約的患者與呈現資料非同一人，請按取消改約解除狀態。」→ 確認患者正確後按<strong>確定</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#FFD59E;color:#7A3A00;">⑥</div>
+            <div class="step-body">
+              <div class="step-title">改約成功後，口頭確認新時間，點「儲存」</div>
+              <div class="bubble">已幫您改約至＿月＿日＿點，請問正確嗎？</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="callout c-warn" style="margin-top:14px;">
+          <span class="callout-label">🔧 選錯患者時</span>
+          立刻按「<strong>取消改約</strong>」解除狀態，再取消錯誤時間的預約，重新操作。
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch10 取消 OP ────────── -->
+      <div class="chapter" id="ch10">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:#F7C1C1;">❌</div>
+          <div class="ch-meta">
+            <div class="ch-title">10. 取消預約 — 舊患者（OP）</div>
+            <div class="ch-sub">舊患者來電取消已預約的時段</div>
+          </div>
+          <span class="ch-tag" style="background:var(--red-bg);color:var(--red-fg);">OP</span>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:#F7C1C1;color:var(--red-fg);">①</div>
+            <div class="step-body">
+              <div class="step-title">確認身分（民國生日 + 全名），找到預約記錄</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#F7C1C1;color:var(--red-fg);">②</div>
+            <div class="step-body">
+              <div class="step-title">點選要取消的那筆約診 → 確認提示 → 確定</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#F7C1C1;color:var(--red-fg);">③</div>
+            <div class="step-body">
+              <div class="step-title">在約診表單中，點「取消約診」按鈕</div>
+              <div class="callout c-ok">
+                <span class="callout-label">✅ 完成</span>
+                取消成功後，原時段會自動釋放為空白可預約狀態。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch11 取消 NP ────────── -->
+      <div class="chapter" id="ch11">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:#E8D5F7;">❌</div>
+          <div class="ch-meta">
+            <div class="ch-title">11. 取消預約 — 新患者（NP）</div>
+            <div class="ch-sub">NP 無就診紀錄，需用人工方式搜尋</div>
+          </div>
+          <span class="ch-tag" style="background:#E8D5F7;color:#4A1A7A;">NP</span>
+        </div>
+
+        <div class="callout c-info" style="margin-bottom:14px;">
+          NP 沒有就診紀錄，<strong>無法用生日查詢</strong>，只能用以下兩種方式搜尋。
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:#E8D5F7;color:#4A1A7A;">①</div>
+            <div class="step-body">
+              <div class="step-title">患者記得日期時間 → 直接到約診簿對應時段尋找</div>
+              <div class="step-desc">找到後點入該筆約診，點「取消約診」完成。</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#E8D5F7;color:#4A1A7A;">②</div>
+            <div class="step-body">
+              <div class="step-title">患者忘記日期時間 → 用 NP 預約總表搜尋</div>
+
+              <div class="flow">
+                <span class="flow-step">左上角「查詢患者」</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">點「新患者」</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">左下角「預約記錄」</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">列出所有 NP 預約</span>
+              </div>
+
+              <div class="callout c-info" style="margin-top:10px;">
+                <span class="callout-label">💡 快速定位</span>
+                預約表開啟後，按 <code style="background:var(--bg);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:12px;">Ctrl + F</code> 搜尋患者姓名，快速找到對應筆數。
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#E8D5F7;color:#4A1A7A;">③</div>
+            <div class="step-body">
+              <div class="step-title">找到後，點入約診 → 點「取消約診」完成</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ────────── Ch12 注意事項 ────────── -->
+      <div class="chapter" id="ch12">
+        <div class="ch-header">
+          <div class="ch-icon" style="background:var(--gray-bg);">⚡</div>
+          <div class="ch-meta">
+            <div class="ch-title">常見注意事項</div>
+            <div class="ch-sub">重要提醒與錯誤預防</div>
+          </div>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num" style="background:#FFD59E;color:#7A3A00;">!</div>
+            <div class="step-body">
+              <div class="step-title">改約有 5 分鐘時限，<u>點「改約」前先確認好新時間</u></div>
+              <div class="step-desc">超時需重新操作。不要點完改約才開始和患者討論新時段。</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#F7C1C1;color:var(--red-fg);">!</div>
+            <div class="step-body">
+              <div class="step-title">改約選錯患者 → 立刻點「取消改約」</div>
+              <div class="step-desc">再取消錯誤時間的預約，重新完整操作一次。</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:#C0DD97;color:#173404;">!</div>
+            <div class="step-body">
+              <div class="step-title">掛號完成後，立刻登 Google 日帳表</div>
+              <div class="step-desc">YouKnow 與日帳表金額不一致時，立即告知主管，不可自行修改。</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--blue-bg);color:var(--blue-fg);">!</div>
+            <div class="step-body">
+              <div class="step-title">進 YouKnow 前，確認藍色底色停在正確的病患列</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--pink-bg);color:var(--pink-fg);">!</div>
+            <div class="step-body">
+              <div class="step-title">欠卡押單：蓋章 + 填補卡期限（今天 +12 天）</div>
+              <div class="step-desc">退押金時，請病患在紙本收據上簽名後歸檔。</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" style="background:var(--gray-bg);color:var(--gray-fg);">!</div>
+            <div class="step-body">
+              <div class="step-title">不確定的操作 → 先暫停，詢問主管</div>
+              <div class="step-desc">猜測操作可能導致系統紀錄錯誤，詢問主管永遠是最安全的選擇。</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        如有操作疑問，請洽詢主管｜絕美板橋牙醫診所 — 內部使用文件
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+</div><!-- /layout -->
+
+<script>
+// Smooth scroll + active state
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Update active on scroll
+const chapters = document.querySelectorAll('.chapter');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let current = '';
+  chapters.forEach(ch => {
+    const top = ch.getBoundingClientRect().top;
+    if (top < 100) current = ch.id;
+  });
+  navItems.forEach(n => {
+    n.classList.toggle('active', n.getAttribute('href') === '#' + current);
+  });
+}, { passive: true });
+
+// Checkbox toggle
+function toggle(el) {
+  el.classList.toggle('done');
+}
+
+// Search
+function doSearch(q) {
+  const content = document.getElementById('mainContent');
+  // Remove existing highlights
+  content.querySelectorAll('.hl').forEach(h => {
+    const parent = h.parentNode;
+    parent.replaceChild(document.createTextNode(h.textContent), h);
+    parent.normalize();
+  });
+  if (!q.trim()) return;
+  const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  function walk(node) {
+    if (node.nodeType === 3) {
+      if (regex.test(node.textContent)) {
+        const span = document.createElement('span');
+        span.innerHTML = node.textContent.replace(regex, m => `<span class="hl">${m}</span>`);
+        node.parentNode.replaceChild(span, node);
+      }
+    } else if (node.nodeType === 1 && !['SCRIPT','STYLE','INPUT'].includes(node.tagName)) {
+      [...node.childNodes].forEach(walk);
+    }
+  }
+  walk(content);
+  // Scroll to first match
+  const first = content.querySelector('.hl');
+  if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Animate chapters on load with stagger
+chapters.forEach((ch, i) => {
+  ch.style.animationDelay = (i * 0.05) + 's';
+});
+
+// ── 儲存含圖片版本 ────────────────────────────────────────────
+
+function saveWithImages() {
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '⏳ 處理中…';
+  btn.classList.add('saving');
+
+  setTimeout(() => {
+    // Clone the entire document
+    const clone = document.documentElement.cloneNode(true);
+
+    // In the clone, replace every screenshot-inner that has an image
+    // with a static version (remove onclick, remove remove-button)
+    clone.querySelectorAll('.screenshot-inner').forEach(inner => {
+      inner.removeAttribute('onclick');
+      // Remove the ✕ remove button if present
+      const removeBtn = inner.querySelector('.img-remove');
+      if (removeBtn) removeBtn.remove();
+      // Remove upload-hint if still showing (no image)
+      const hint = inner.querySelector('.upload-hint');
+      if (hint) hint.remove();
+    });
+
+    // Remove the hidden file input from clone
+    const fi = clone.querySelector('input[type="file"]');
+    if (fi) fi.remove();
+
+    // Build full HTML string
+    const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '櫃台操作手冊_含截圖.html';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    btn.textContent = '✅ 已下載！';
+    setTimeout(() => {
+      btn.textContent = '💾 儲存含圖片版本';
+      btn.classList.remove('saving');
+    }, 2500);
+  }, 100);
+}
+
+
+// Hidden file input (shared, reused for every click)
+const fileInput = document.createElement('input');
+fileInput.type = 'file';
+fileInput.accept = 'image/*';
+fileInput.style.display = 'none';
+document.body.appendChild(fileInput);
+
+let pendingInner = null; // which screenshot-inner triggered the upload
+
+function triggerUpload(innerEl) {
+  pendingInner = innerEl;
+  fileInput.value = '';
+  fileInput.click();
+}
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (!file || !pendingInner) return;
+  loadImageInto(pendingInner, file);
+  pendingInner = null;
+});
+
+function loadImageInto(innerEl, file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const src = e.target.result;
+    const container = innerEl.closest('.screenshot');
+
+    // Replace inner content with the image
+    innerEl.innerHTML = `
+      <div class="screenshot-img-wrap">
+        <img src="${src}" alt="截圖">
+        <button class="img-remove" title="移除圖片" onclick="removeImage(this)">✕</button>
+      </div>`;
+    innerEl.onclick = null; // disable click-to-upload after image loaded
+    container.classList.add('has-image');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImage(btn) {
+  const imgWrap = btn.closest('.screenshot-img-wrap');
+  const innerEl = imgWrap.closest('.screenshot-inner');
+  const container = innerEl.closest('.screenshot');
+
+  // Restore original placeholder content
+  const title = container.querySelector('.screen-title').textContent;
+  innerEl.innerHTML = `
+    <div class="ss-icon">🖥️</div>
+    <div class="ss-text">${title}</div>
+    <div class="upload-hint">📂 點此上傳截圖</div>`;
+  innerEl.onclick = function() { triggerUpload(this); };
+  container.classList.remove('has-image');
+}
+
+// ── Drag-and-drop support ──────────────────────────────────────
+
+document.querySelectorAll('.screenshot').forEach(box => {
+  box.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    box.classList.add('drag-over');
+  });
+  box.addEventListener('dragleave', () => {
+    box.classList.remove('drag-over');
+  });
+  box.addEventListener('drop', (e) => {
+    e.preventDefault();
+    box.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const inner = box.querySelector('.screenshot-inner');
+    if (inner) loadImageInto(inner, file);
+  });
+});
+</script>
+
+</body>
+</html>
