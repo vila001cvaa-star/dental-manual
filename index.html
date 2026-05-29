@@ -98,7 +98,7 @@
   }
 
   /* ── Main ── */
-  .main { flex: 1; min-width: 0; }
+  .main { flex: 1; min-width: 0; overflow-x: hidden; }
 
   /* ── Top bar ── */
   .topbar {
@@ -130,7 +130,7 @@
   #saveBtn.saving { background: var(--muted); border-color: var(--muted); cursor: default; }
 
   /* ── Content ── */
-  .content { padding: 28px 32px 60px; max-width: 860px; }
+  .content { padding: 28px 32px 60px; max-width: 860px; overflow-x: hidden; }
 
   /* ── Chapter ── */
   .chapter {
@@ -282,7 +282,7 @@
     margin-top: 12px;
     overflow: hidden;
   }
-  .screenshot-inner img { width: 100%; display: block; border-radius: 0 0 var(--r-lg) var(--r-lg); }
+  .screenshot-inner img { width: 100%; max-width: 100%; display: block; border-radius: 0 0 var(--r-lg) var(--r-lg); object-fit: contain; }
   .screenshot-bar {
     background: var(--border);
     padding: 7px 12px;
