@@ -42,55 +42,99 @@
     flex-direction: column;
   }
 
-  /* ── Top bar ── */
+  /* ── Top bar — 完全鎖死固定 ── */
   .topbar {
+    height: 60px;
+    width: 100%;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1000;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 12px 28px;
+    padding: 0 28px;
     display: flex; align-items: center; justify-content: space-between;
-    flex-shrink: 0;
-    width: 100%;
-    z-index: 100;
     gap: 12px;
   }
   .topbar h1 { font-size: 15px; font-weight: 700; white-space: nowrap; }
   .topbar-right { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
 
-  /* ── Below topbar: sidebar + main ── */
+  /* ── Layout 容器 ── */
   .layout {
     display: flex;
     flex: 1;
+    height: calc(100vh - 60px);
     overflow: hidden;
   }
 
-  /* ── Sidebar ── */
+  /* ── Sidebar — 完全鎖死固定 ── */
   .sidebar {
     width: 230px;
+    height: 100%;
+    overflow-y: auto;
     flex-shrink: 0;
+    box-sizing: border-box;
     background: var(--surface);
     border-right: 1px solid var(--border);
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
   }
 
-  /* ── Main ── */
+  /* ── Main — 只有這裡捲動 ── */
   .main {
     flex: 1;
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    min-width: 0;
-    background: var(--bg);
     display: flex;
     justify-content: center;
+    background: var(--bg);
   }
 
   /* ── Content wrapper ── */
   .content {
-    padding: 28px 32px 60px;
-    max-width: 900px;
     width: 100%;
-    overflow-x: hidden;
+    max-width: 900px;
+    padding: 28px 32px 60px;
+  }
+
+  /* ── 強制所有警告框、標籤、圖片容器垂直排列 ── */
+  .callout,
+  .annot-legend,
+  .screenshot,
+  .sys-box,
+  .bubble,
+  .alert-box,
+  .example,
+  .money-table,
+  .flow,
+  .session-tabs,
+  .checklist,
+  .sheet {
+    display: block !important;
+    width: 100% !important;
+    float: none !important;
+    clear: both !important;
+    position: static !important;
+  }
+
+  .annot-legend {
+    margin: 8px 0 !important;
+    text-align: left !important;
+  }
+
+  .screenshot {
+    margin: 10px 0 !important;
+  }
+
+  .screenshot img,
+  .screenshot-inner img {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 400px !important;
+    display: block !important;
+    object-fit: contain !important;
+    border-radius: 0 0 var(--r-lg) var(--r-lg);
   }
   .sidebar-logo {
     padding: 18px 16px 14px;
@@ -157,7 +201,7 @@
   #saveBtn:active { transform: scale(0.97); }
   #saveBtn.saving { background: var(--muted); border-color: var(--muted); cursor: default; }
 
-  /* content defined above */
+  /* content defined in layout section above */
 
   /* ── Chapter ── */
   .chapter {
@@ -214,13 +258,14 @@
     box-shadow: 0 0 0 2px var(--border);
     background: var(--surface);
   }
-  .step-body { 
-    flex: 1; 
-    padding-top: 4px; 
-    min-width: 0; 
+  .step-body {
+    flex: 1;
+    padding-top: 4px;
+    min-width: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    gap: 0;
   }
   .step-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
   .step-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
@@ -657,10 +702,10 @@
                 → 代表需自費收款，需提前告知病患備妥款項。
               </div>
 
-              <!-- Screenshot placeholder -->
               <div class="annot-legend">
-                <div class="annot-item">
-                  <div class="annot-num">①</div>
+                <div class="annot-item"><div class="annot-num">①</div><div>左上方「約診」欄位 — 確認療程內容</div></div>
+                <div class="annot-item"><div class="annot-num">②</div><div>備註區 — 確認是否標示「請準備費用」</div></div>
+              </div>
               <div class="screenshot">
                 <div class="screenshot-bar">
                   <div class="dot" style="background:#FF5F57;"></div>
@@ -668,15 +713,7 @@
                   <div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">北極星 — 候診清單畫面</span>
                 </div>
-                                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch1-step1.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
-                </div>
-              </div>
-                  <div>左上方「約診」欄位 — 確認療程內容</div>
-                </div>
-                <div class="annot-item">
-                  <div class="annot-num">②</div>
-                  <div>備註區 — 確認是否標示「請準備費用」</div>
-                </div>
+                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch1-step1.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
               </div>
             </div>
           </div>
@@ -690,8 +727,9 @@
               </div>
 
               <div class="annot-legend">
-                <div class="annot-item">
-                  <div class="annot-num">①</div>
+                <div class="annot-item"><div class="annot-num">①</div><div>「到診 C」按鈕位置（候診清單右側）</div></div>
+                <div class="annot-item"><div class="annot-num">②</div><div>選「掛號不取卡」— 一般情況預設此選項</div></div>
+              </div>
               <div class="screenshot">
                 <div class="screenshot-bar">
                   <div class="dot" style="background:#FF5F57;"></div>
@@ -699,15 +737,7 @@
                   <div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">北極星 — 到診按鈕</span>
                 </div>
-                                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch1-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
-                </div>
-              </div>
-                  <div>「到診 C」按鈕位置（候診清單右側）</div>
-                </div>
-                <div class="annot-item">
-                  <div class="annot-num">②</div>
-                  <div>選「掛號不取卡」— 一般情況預設此選項</div>
-                </div>
+                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch1-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
               </div>
             </div>
           </div>
@@ -751,18 +781,12 @@
                 <span class="stab stab-pm">午診</span>
                 <span class="stab stab-eve">晚診</span>
               </div>
-
-              <div class="annot-legend">
-                <div class="annot-item"><div class="annot-num">①</div>
               <div class="screenshot">
                 <div class="screenshot-bar">
-                  <div class="dot" style="background:#FF5F57;"></div>
-                  <div class="dot" style="background:#FEBC2E;"></div>
-                  <div class="dot" style="background:#28C840;"></div>
+                  <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">Google 日帳表 — 工作表頁籤</span>
                 </div>
-                                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch1-step3.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
-                </div>
+                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch1-step3.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
               </div>
             </div>
           </div>
@@ -839,17 +863,13 @@
               <div class="callout c-warn" style="margin-top:8px;">
                 <span class="callout-label">⚠ 注意</span>
                 <strong>收費類別務必選擇正確</strong>，選錯類別將導致帳務記錄錯誤。</div>
-              <div class="annot-legend">
-                <div class="annot-item"><div class="annot-num">①</div>
               <div class="screenshot">
                 <div class="screenshot-bar">
                   <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">YouKnow — 自費案件列表</span>
                 </div>
-                                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch2-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div><div>左側選單：「表單輸入」→「自費案件列表」</div></div>
-                <div class="annot-item"><div class="annot-num">②</div><div>✏️ 鉛筆圖示 — 點此進入收款填寫</div></div>
+                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch2-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
               </div>
-            </div>
           </div>
 
           <div class="step">
@@ -889,15 +909,12 @@
             <div class="step-num" style="background:var(--amber-bg);color:var(--amber-fg);">①</div>
             <div class="step-body">
               <div class="step-title">右側點「+ 治療計劃建議」→ 填標題</div>
-              <div class="annot-legend">
-                <div class="annot-item"><div class="annot-num">①</div>
               <div class="screenshot">
                 <div class="screenshot-bar">
                   <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">YouKnow — 新增治療計劃</span>
                 </div>
-                                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch3-step1.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
-                </div>
+                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch3-step1.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
               </div>
             </div>
           </div>
@@ -911,7 +928,10 @@
                   <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">YouKnow — 新增自費項目</span>
                 </div>
-                                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch3-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div><div>類別 → 次分類</div></div>
+                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch3-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
+              </div>
+              <div class="annot-legend">
+                <div class="annot-item"><div class="annot-num">①</div><div>類別 → 次分類</div></div>
                 <div class="annot-item"><div class="annot-num">②</div><div>品項選擇</div></div>
                 <div class="annot-item"><div class="annot-num">③</div><div>牙位 / 售價 / 數量</div></div>
               </div>
@@ -964,16 +984,12 @@
             <div class="step-num" style="background:var(--red-bg);color:var(--red-fg);">②</div>
             <div class="step-body">
               <div class="step-title">點「退」→ 確認視窗按「是」→ 退還 $200 給病患</div>
-
-              <div class="annot-legend">
-                <div class="annot-item"><div class="annot-num">①</div>
               <div class="screenshot">
                 <div class="screenshot-bar">
                   <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">北極星 — 退掛確認視窗</span>
                 </div>
-                                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch4-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
-                </div>
+                <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch4-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
               </div>
 
               <div class="callout c-danger" style="margin-top:10px;">
