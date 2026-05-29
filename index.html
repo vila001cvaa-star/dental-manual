@@ -35,11 +35,12 @@
     font-family: 'Noto Sans TC', sans-serif;
     background: var(--bg);
     color: var(--text);
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
   }
 
   /* ── Layout ── */
-  .layout { display: flex; min-height: 100vh; }
+  .layout { display: flex; height: 100vh; overflow: hidden; }
 
   /* ── Sidebar ── */
   .sidebar {
@@ -98,18 +99,19 @@
   }
 
   /* ── Main ── */
-  .main { flex: 1; min-width: 0; }
+  .main { flex: 1; min-width: 0; overflow-y: auto; height: 100vh; }
 
   /* ── Top bar ── */
   .topbar {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 14px 32px;
+    padding: 12px 24px;
     display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 10;
+    position: sticky; top: 0; z-index: 100;
     white-space: nowrap; flex-wrap: nowrap; min-width: 0;
+    gap: 12px;
   }
-  .topbar h1 { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar h1 { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; min-width: 0; }
   .topbar-right { display: flex; gap: 8px; align-items: center; }
   .chip {
     font-size: 11px; padding: 3px 10px;
