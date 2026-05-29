@@ -83,7 +83,7 @@
   .main {
     flex: 1;
     height: 100%;
-    overflow-y: auto;
+    overflow-y: auto !important;
     overflow-x: hidden;
     display: flex;
     justify-content: center;
@@ -984,17 +984,18 @@
             <div class="step-num" style="background:var(--red-bg);color:var(--red-fg);">②</div>
             <div class="step-body">
               <div class="step-title">點「退」→ 確認視窗按「是」→ 退還 $200 給病患</div>
+
+              <div class="callout c-danger" style="margin-top:10px;">
+                <span class="callout-label">🚫 禁止</span>
+                <strong>已在診間看診的病患，不可自行退掛。</strong>請立即告知主管處理。
+              </div>
+
               <div class="screenshot">
                 <div class="screenshot-bar">
                   <div class="dot" style="background:#FF5F57;"></div><div class="dot" style="background:#FEBC2E;"></div><div class="dot" style="background:#28C840;"></div>
                   <span class="screen-title">北極星 — 退掛確認視窗</span>
                 </div>
                 <div class="screenshot-inner" style="padding:0;cursor:default;"><img src="https://vila001cvaa-star.github.io/dental-manual/ch4-step2.jpg" style="width:100%;display:block;max-height:380px;object-fit:contain;background:#f7f5f0;border-radius:0 0 var(--r-lg) var(--r-lg);"></div>
-              </div>
-
-              <div class="callout c-danger" style="margin-top:10px;">
-                <span class="callout-label">🚫 禁止</span>
-                <strong>已在診間看診的病患，不可自行退掛。</strong>請立即告知主管處理。
               </div>
             </div>
           </div>
