@@ -107,8 +107,9 @@
     padding: 14px 32px;
     display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 10;
+    white-space: nowrap; flex-wrap: nowrap; min-width: 0;
   }
-  .topbar h1 { font-size: 16px; font-weight: 700; }
+  .topbar h1 { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbar-right { display: flex; gap: 8px; align-items: center; }
   .chip {
     font-size: 11px; padding: 3px 10px;
@@ -314,9 +315,9 @@
     position: relative; width: 100%;
   }
   .screenshot-img-wrap img { width: 100%; display: block; max-height: 400px; object-fit: contain; background: var(--bg); }
-  .screenshot-inner img { width: 100%; display: block; max-height: 400px; object-fit: contain; background: var(--bg); border-radius: 0 0 var(--r-lg) var(--r-lg); }
+  .screenshot-inner img { width: 100%; display: block; max-height: 380px; object-fit: contain; background: var(--bg); border-radius: 0 0 var(--r-lg) var(--r-lg); }
   /* Constrain screenshot width so annotation legend stays below */
-  .screenshot { max-width: 600px; }
+  .screenshot { max-width: 100%; }
     position: absolute; top: 8px; right: 8px;
     background: rgba(0,0,0,0.55); color: #fff;
     border: none; border-radius: 50%;
