@@ -35,12 +35,11 @@
     font-family: 'Noto Sans TC', sans-serif;
     background: var(--bg);
     color: var(--text);
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
   }
 
   /* ── Layout ── */
-  .layout { display: flex; height: 100vh; overflow: hidden; }
+  .layout { display: flex; min-height: 100vh; }
 
   /* ── Sidebar ── */
   .sidebar {
@@ -99,19 +98,17 @@
   }
 
   /* ── Main ── */
-  .main { flex: 1; min-width: 0; overflow-y: auto; height: 100vh; }
+  .main { flex: 1; min-width: 0; }
 
   /* ── Top bar ── */
   .topbar {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
+    padding: 14px 32px;
     display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-    white-space: nowrap; flex-wrap: nowrap; min-width: 0;
-    gap: 12px;
+    position: sticky; top: 0; z-index: 10;
   }
-  .topbar h1 { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; min-width: 0; }
+  .topbar h1 { font-size: 16px; font-weight: 700; }
   .topbar-right { display: flex; gap: 8px; align-items: center; }
   .chip {
     font-size: 11px; padding: 3px 10px;
@@ -284,8 +281,8 @@
     padding: 0;
     margin-top: 12px;
     overflow: hidden;
-    transition: border-color 0.2s;
   }
+  .screenshot-inner img { width: 100%; display: block; border-radius: 0 0 var(--r-lg) var(--r-lg); }
   .screenshot-bar {
     background: var(--border);
     padding: 7px 12px;
